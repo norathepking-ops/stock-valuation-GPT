@@ -264,7 +264,7 @@ select option{background:var(--surface2)}
   <button class="tab-btn" onclick="showTab('tab-wacc',this)"><span class="tab-num">05</span>WACC</button>
   <button class="tab-btn" onclick="showTab('tab-valuation',this)"><span class="tab-num">06</span>Valuation</button>
   <button class="tab-btn" onclick="showTab('tab-sensitivity',this)"><span class="tab-num">07</span>Sensitivity</button>
-  <button class="tab-btn" onclick="showTab('tab-peers',this)"><span class="tab-num">08</span>Peer Comparison</button>
+  <input type="text" id="company-name" value="..." ...>
 </nav>
 
 <div class="main">
@@ -272,11 +272,11 @@ select option{background:var(--surface2)}
 <!-- ═══ TAB 1: ASSUMPTIONS ═══ -->
 <div id="tab-assumptions" class="tab-content active">
   <div class="card">
-    <div class="card-header">
+    <input type="number" id="current-price" value="0" ...>
       <div class="card-title">⚙ ข้อมูลบริษัทและ Assumptions <span style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:var(--accent3);font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:4px;margin-left:6px">TFRS</span></div>
       <div style="font-size:10px;color:var(--text3)">ข้อมูลสีเขียว = ดึงจาก Live | แก้ไขได้ทุกช่อง</div>
     </div>
-    <div class="card-body">
+    <input type="number" id="shares-out" value="0" ...>
       <div class="section-label">ข้อมูลบริษัท</div>
       <div class="input-grid mb16">
         <div class="input-group">
@@ -297,7 +297,7 @@ select option{background:var(--surface2)}
           <div class="input-wrap"><input type="number" id="a_shares" value="0" step="1"><span class="unit">M</span></div>
         </div>
         <div class="input-group">
-          <label class="input-label">กลุ่มอุตสาหกรรม</label>
+          <input type="number" id="beta-input" value="1.0" ...>
           <div class="input-wrap">
             <select id="a_sector">
               <option>Technology</option><option>Energy</option><option>Banking</option>
