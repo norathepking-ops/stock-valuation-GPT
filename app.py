@@ -1,58 +1,38 @@
 import streamlit as st
 import yfinance as yf
-import pandas as pd
 
-st.set_page_config(layout="wide", page_title="TFRS Valuation Live")
+st.set_page_config(layout="wide")
 
-# 1. ส่วนดึงข้อมูลหุ้น (Python)
-ticker = st.text_input("กรอกชื่อหุ้น (เช่น ICHI, PTT):", "").upper()
-stock_data = {}
+# ส่วนรับค่า
+ticker = st.text_input("🔍 พิมพ์ชื่อหุ้น (เช่น ICHI):", "").upper()
+
+# อ่านไฟล์ HTML
+with open("TFRS_Valuation_Live.html", "r", encoding="utf-8") as f:
+    html = f.read()
 
 if ticker:
     try:
-        if not ticker.endswith(".BK"):
-            search_ticker = f"{ticker}.BK"
-        else:
-            search_ticker = ticker
-            
-        data = yf.Ticker(search_ticker)
-        info = data.info
+        # ดึงข้อมูล
+        stock = yf.Ticker(f"{ticker}.BK")
+        info = stock.info
         
-        # เตรียมข้อมูลเพื่อส่งไปให้ HTML
-        stock_data = {
-            "symbol": ticker,
-            "shortName": info.get('shortName', ticker),
-            "currentPrice": info.get('currentPrice', 0),
-            "marketCap": info.get('marketCap', 0) / 1_000_000, # หน่วยล้าน
-            "shares": info.get('sharesOutstanding', 0) / 1_000_000,
-            "beta": info.get('beta', 1.0)
-        }
+        # เตรียมข้อมูล (แก้ไขชื่อ ID ให้ตรงกับไฟล์ HTML ของคุณ)
+        data_js = f"""
+        <script>
+            window.addEventListener('load', () => {{
+                if(document.getElementById('ticker-input')) document.getElementById('ticker-input').value = '{ticker}';
+                if(document.getElementById('company-name')) document.getElementById('company-name').value = '{info.get('longName', '')}';
+                if(document.getElementById('current-price')) document.getElementById('current-price').value = '{info.get('currentPrice', 0)}';
+                if(document.getElementById('shares-out')) document.getElementById('shares-out').value = '{info.get('sharesOutstanding', 0)}';
+                if(document.getElementById('beta-input')) document.getElementById('beta-input').value = '{info.get('beta', 1.0)}';
+                
+                // สั่งคำนวณใหม่
+                if(typeof calculateAll === 'function') calculateAll();
+            }});
+        </script>
+        """
+        html = html.replace("</body>", f"{data_js}</body>")
     except Exception as e:
-        st.error(f"ไม่พบข้อมูลหุ้น {ticker}")
+        st.error(f"เกิดข้อผิดพลาด: {e}")
 
-# 2. อ่านไฟล์ HTML ของคุณ
-with open("TFRS_Valuation_Live.html", "r", encoding="utf-8") as f:
-    html_content = f.read()
-
-# 3. ใส่ JavaScript เพื่อเอาข้อมูลจาก Python ไปหยอดลงช่องใน HTML
-if stock_data:
-    inject_js = f"""
-    <script>
-        window.addEventListener('load', function() {{
-            // หยอดข้อมูลลงใน ID ต่างๆ ของคุณ
-            document.getElementById('a_ticker').value = "{stock_data['symbol']}";
-            document.getElementById('a_company').value = "{stock_data['shortName']}";
-            document.getElementById('a_price').value = {stock_data['currentPrice']};
-            document.getElementById('a_mktcap').value = {stock_data['marketCap']};
-            document.getElementById('a_shares').value = {stock_data['shares']};
-            document.getElementById('a_beta').value = {stock_data['beta']};
-            
-            // สั่งให้ HTML คำนวณใหม่ทันที
-            if(typeof calculateAll === 'function') calculateAll();
-        }});
-    </script>
-    """
-    html_content = html_content.replace("</body>", f"{inject_js}</body>")
-
-# 4. แสดงผล
-st.components.v1.html(html_content, height=1200, scrolling=True)
+st.components.v1.html(html, height=1000, scrolling=True)
