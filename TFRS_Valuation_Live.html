@@ -1689,5 +1689,43 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 </script>
+  ... โค้ดและสคริปต์เดิมของคุณที่มีอยู่ก่อนหน้า ...
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // ตรวจสอบว่ามีข้อมูลถูกส่งมาจาก Streamlit (Python) หรือไม่
+        if (window.stStockData) {
+            const data = window.stStockData;
+            
+            // นำข้อมูลไปหยอดใส่ช่องต่างๆ (ต้องแก้ ID ใน getElementById ให้ตรงกับช่องใน HTML ของคุณ)
+            if(document.getElementById('ticker-input')) {
+                document.getElementById('ticker-input').value = data.ticker;
+            }
+            if(document.getElementById('company-name')) {
+                 document.getElementById('company-name').value = data.name;
+            }
+            if(document.getElementById('industry-input')) {
+                 document.getElementById('industry-input').value = data.industry;
+            }
+            if(document.getElementById('current-price')) {
+                 document.getElementById('current-price').value = data.currentPrice;
+            }
+            if(document.getElementById('shares-out')) {
+                 document.getElementById('shares-out').value = data.sharesOutstanding;
+            }
+            if(document.getElementById('beta-input')) {
+                 document.getElementById('beta-input').value = data.beta;
+            }
+            
+            // สั่งให้ระบบคำนวณค่าใหม่ทันทีหลังจากกรอกตัวเลขเสร็จ
+            if(typeof calculateAll === 'function') {
+                calculateAll();
+            }
+        }
+    });
+    </script>
+</body>
+</html>
+  
 </body>
 </html>
