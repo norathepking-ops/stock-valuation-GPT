@@ -34,7 +34,7 @@ if ticker:
         st.error(f"Error: {e}")
 
 # โหลด HTML
-with open("TFRS_Valuation_Live.html", "r", encoding="utf-8") as f:
+with open("TFRS_Valuation_Live_fixed.html", "r", encoding="utf-8") as f:
     html = f.read()
 
 # inject data เข้า HTML
