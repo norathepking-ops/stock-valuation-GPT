@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TFRS Valuation</title>
+</head>
+<body>
+
+<h2>Auto Fill Data (Yahoo Finance)</h2>
+
+<label>Company:</label><br>
+<input id="a_company"><br><br>
+
+<label>Price:</label><br>
+<input id="a_price"><br><br>
+
+<label>Shares (ล้านหุ้น):</label><br>
+<input id="a_shares"><br><br>
+
+<label>Market Cap (ล้านบาท):</label><br>
+<input id="a_mktcap"><br><br>
+
+<label>Beta:</label><br>
+<input id="a_beta"><br><br>
+
+<label>PE:</label><br>
+<input id="a_pe_ttm"><br><br>
+
+<script>
+
+/*PYTHON_DATA_HERE*/
+
+// ใส่ข้อมูลจาก Python ลง input
+if (typeof PY_DATA !== "undefined") {
+
+  if (PY_DATA.name)
+    document.getElementById("a_company").value = PY_DATA.name;
+
+  if (PY_DATA.price)
+    document.getElementById("a_price").value = PY_DATA.price;
+
+  if (PY_DATA.shares)
+    document.getElementById("a_shares").value = (PY_DATA.shares / 1000000).toFixed(2);
+
+  if (PY_DATA.marketCap)
+    document.getElementById("a_mktcap").value = (PY_DATA.marketCap / 1000000).toFixed(2);
+
+  if (PY_DATA.beta)
+    document.getElementById("a_beta").value = PY_DATA.beta;
+
+  if (PY_DATA.pe)
+    document.getElementById("a_pe_ttm").value = PY_DATA.pe;
+}
+
+</script>
+
+</body>
+</html>
